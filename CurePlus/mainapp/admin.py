@@ -5,7 +5,7 @@ from mainapp.models import Order, PricingSettings, Product
 
 @admin.register(PricingSettings)
 class PricingSettingsAdmin(admin.ModelAdmin):
-    list_display = ("base_box_price", "lab_coat_price", "updated_at")
+    list_display = ("base_box_price", "private_college_extra", "lab_coat_price", "updated_at")
 
     def has_add_permission(self, request):
         return not PricingSettings.objects.exists()
@@ -26,6 +26,7 @@ class OrderAdmin(admin.ModelAdmin):
         "id",
         "customer_name",
         "customer_mobile",
+        "college_type",
         "includes_lab_coat",
         "total_amount",
         "status",
@@ -33,6 +34,6 @@ class OrderAdmin(admin.ModelAdmin):
         "paymob_order_id",
         "created_at",
     )
-    list_filter = ("status", "includes_lab_coat", "created_at")
+    list_filter = ("status", "college_type", "includes_lab_coat", "created_at")
     search_fields = ("customer_name", "customer_mobile", "customer_email", "bill_reference", "paymob_order_id")
     readonly_fields = ("paymob_order_id", "bill_reference", "paid_at")
