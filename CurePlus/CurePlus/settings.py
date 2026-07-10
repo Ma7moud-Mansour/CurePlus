@@ -34,6 +34,8 @@ ALLOWED_HOSTS = [
     '.ngrok-free.app',
     '.ngrok-free.dev',
     '.ngrok-free.com',
+    'www.cureplus.site',
+    'cureplus.site',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
