@@ -23,13 +23,7 @@ class PricingSettings(models.Model):
         max_digits=10,
         decimal_places=2,
         default=600,
-        verbose_name="سعر البوكس الاساسي للحكومي",
-    )
-    private_college_extra = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-        verbose_name="زيادة الاهلية عن الحكومي",
+        verbose_name="سعر البوكس الاساسي",
     )
     lab_coat_price = models.DecimalField(
         max_digits=10,
@@ -65,21 +59,11 @@ class Order(models.Model):
         ("PAID", "تم الدفع بنجاح"),
         ("FAILED", "فشلت عملية الدفع"),
     ]
-    COLLEGE_TYPE_CHOICES = [
-        ("government", "حكومي"),
-        ("private", "اهلية"),
-    ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer_name = models.CharField(max_length=255, verbose_name="اسم الطالب")
     customer_mobile = models.CharField(max_length=15, verbose_name="رقم الهاتف")
     customer_email = models.EmailField(verbose_name="البريد الالكتروني")
-    college_type = models.CharField(
-        max_length=20,
-        choices=COLLEGE_TYPE_CHOICES,
-        default="government",
-        verbose_name="نوع الكلية",
-    )
     includes_lab_coat = models.BooleanField(default=False, verbose_name="يشمل لاب كوت")
 
     product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name="الادوات المحجوزة")

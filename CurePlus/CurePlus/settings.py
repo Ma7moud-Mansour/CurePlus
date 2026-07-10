@@ -10,10 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,9 +30,16 @@ SECRET_KEY = 'django-insecure-c*h=-o)zn)2+5e-tm!@9eu0j-diy^^*9pt10*$#61kt2efyup5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.ngrok-free.app',
+    '.ngrok-free.dev',
+    '.ngrok-free.com',
+]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://maison-scrawniest-jenice.ngrok-free.dev',
+    
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -121,3 +133,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ── Paymob Payment Gateway (Intention API v1) ──────────────────────
+PAYMOB_API_KEY = os.environ.get("PAYMOB_API_KEY")          # Secret Key (egy_sk_...)
+PAYMOB_PUBLIC_KEY = os.environ.get("PAYMOB_PUBLIC_KEY")     # Public Key (egy_pk_...)
+PAYMOB_INTEGRATION_ID = os.environ.get("PAYMOB_INTEGRATION_ID")
+PAYMOB_HMAC_SECRET = os.environ.get("PAYMOB_HMAC_SECRET")

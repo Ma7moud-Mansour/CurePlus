@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>{% if payment_success %}تم الدفع بنجاح{% else %}فشلت عملية الدفع{% endif %} — CurePlus</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'charcoal-glass': 'rgba(25, 25, 25, 0.8)',
+            'neon-orange': '#ff7a00',
+            'deep-orange': '#e65c00',
+          },
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            script: ['Great Vibes', 'cursive'],
+          },
+          boxShadow: {
+            'orange-glow': '0 0 20px rgba(255, 122, 0, 0.3)',
+            'btn-glow': '0 10px 25px -5px rgba(230, 92, 0, 0.5)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #000;
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(255, 122, 0, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(255, 122, 0, 0.1) 0%, transparent 40%);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .text-glow { text-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+    .script-text {
+      font-family: 'Great Vibes', cursive;
+      background: linear-gradient(to bottom, #ffc107, #ff7a00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @keyframes checkmark-pop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop { animation: checkmark-pop 0.6s ease-out forwards; }
+  </style>
+</head>
+<body class="font-cairo text-white min-h-screen flex flex-col">
+
+  <header class="flex flex-col items-center pt-8 pb-4 px-6 text-center">
+    <div class="mb-2" aria-hidden="true">
+      <svg class="w-10 h-10 text-neon-orange" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2c-.5 0-1 .1-1.5.2-1.8.6-3.1 2.2-3.4 4.1-.1.4-.1.8-.1 1.2 0 3.3 2.1 5.9 5 7V22h2v-7.5c2.9-1.1 5-3.7 5-7 0-.4 0-.8-.1-1.2-.3-1.9-1.6-3.5-3.4-4.1-.5-.1-1-.2-1.5-.2zm0 2c.3 0 .5 0 .8.1 1 .3 1.8 1.1 2 2.1.1.2.1.5.1.8 0 1.9-1.3 3.6-3 4.2v-1.2c0-.6-.4-1-1-1s-1 .4-1 1v1.2c-1.7-.6-3-2.3-3-4.2 0-.3 0-.6.1-.8.2-1 1-1.8 2-2.1.3-.1.5-.1.8-.1z"></path>
+      </svg>
+    </div>
+    <div class="relative flex items-center justify-center space-x-2 space-x-reverse mb-1">
+      <div class="h-px w-8 bg-gradient-to-l from-transparent to-neon-orange"></div>
+      <span class="text-[10px] tracking-widest uppercase text-neon-orange font-bold">Requirements Of</span>
+      <div class="h-px w-8 bg-gradient-to-r from-transparent to-neon-orange"></div>
+    </div>
+    <h1 class="text-4xl font-extrabold text-white text-glow tracking-tighter -mb-3">2ND YEAR</h1>
+    <h2 class="text-3xl script-text">Dent Zag</h2>
+  </header>
+
+  <main class="px-5 max-w-md mx-auto flex-1 flex items-start justify-center pt-4">
+    <div class="glass-card bg-charcoal-glass rounded-[40px] p-8 shadow-2xl w-full text-center">
+
+      {% if payment_success %}
+        {# ── Success State ─────────────────────────────────── #}
+        <div class="mb-6 animate-pop">
+          <div class="w-24 h-24 mx-auto rounded-full bg-green-500/15 border-2 border-green-500/40 flex items-center justify-center">
+            <svg class="w-14 h-14 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-2xl font-extrabold text-green-400 mb-2">تم الدفع بنجاح! ✅</h3>
+        <p class="text-gray-400 text-sm mb-6">شكراً لك، تم تأكيد عملية الدفع الخاصة بك.</p>
+
+        {% if order %}
+          <div class="space-y-3 text-sm mb-6">
+            <div class="flex justify-between items-center px-4 py-3 rounded-2xl bg-white/5">
+              <span class="text-gray-400">الاسم</span>
+              <span class="text-white font-bold">{{ order.customer_name }}</span>
+            </div>
+            <div class="flex justify-between items-center px-4 py-3 rounded-2xl bg-white/5">
+              <span class="text-gray-400">رقم الطلب</span>
+              <span class="text-neon-orange font-bold font-mono text-xs">{{ order.bill_reference }}</span>
+            </div>
+            <div class="flex justify-between items-center px-4 py-3 rounded-2xl bg-white/5">
+              <span class="text-gray-400">المبلغ</span>
+              <span class="text-white font-bold">{{ order.total_amount }} جنيه</span>
+            </div>
+            {% if order.includes_lab_coat %}
+              <div class="flex justify-between items-center px-4 py-3 rounded-2xl bg-white/5">
+                <span class="text-gray-400">لاب كوت</span>
+                <span class="text-green-400 font-bold">✓ مشمول</span>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="inline-block w-full bg-gradient-to-r from-deep-orange to-neon-orange hover:brightness-110 active:scale-[0.98] transition-all rounded-3xl min-h-14 px-6 py-4 text-lg font-bold shadow-btn-glow">
+          العودة للصفحة الرئيسية
+        </a>
+
+      {% else %}
+        {# ── Failure State ─────────────────────────────────── #}
+        <div class="mb-6 animate-pop">
+          <div class="w-24 h-24 mx-auto rounded-full bg-red-500/15 border-2 border-red-500/40 flex items-center justify-center">
+            <svg class="w-14 h-14 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-2xl font-extrabold text-red-400 mb-2">فشلت عملية الدفع ❌</h3>
+        <p class="text-gray-400 text-sm mb-6">
+          {% if not hmac_valid %}
+            تعذر التحقق من صحة العملية. من فضلك حاول مرة أخرى.
+          {% else %}
+            لم يتم إتمام الدفع. يمكنك المحاولة مرة أخرى.
+          {% endif %}
+        </p>
+
+        <a href="{% url 'home' %}" class="inline-block w-full bg-gradient-to-r from-deep-orange to-neon-orange hover:brightness-110 active:scale-[0.98] transition-all rounded-3xl min-h-14 px-6 py-4 text-lg font-bold shadow-btn-glow">
+          حاول مرة أخرى
+        </a>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <footer class="mt-10 mb-6 flex flex-col items-center">
+    <div class="flex items-center space-x-4 space-x-reverse opacity-40">
+      <div class="w-8 h-px bg-white"></div>
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-.5 0-1 .1-1.5.2-1.8.6-3.1 2.2-3.4 4.1-.1.4-.1.8-.1 1.2 0 3.3 2.1 5.9 5 7V22h2v-7.5c2.9-1.1 5-3.7 5-7 0-.4 0-.8-.1-1.2-.3-1.9-1.6-3.5-3.4-4.1-.5-.1-1-.2-1.5-.2zm0 2c.3 0 .5 0 .8.1 1 .3 1.8 1.1 2 2.1.1.2.1.5.1.8 0 1.9-1.3 3.6-3 4.2v-1.2c0-.6-.4-1-1-1s-1 .4-1 1v1.2c-1.7-.6-3-2.3-3-4.2 0-.3 0-.6.1-.8.2-1 1-1.8 2-2.1.3-.1.5-.1.8-.1z"></path></svg>
+      <div class="w-8 h-px bg-white"></div>
+    </div>
+  </footer>
+
+</body>
+</html>
