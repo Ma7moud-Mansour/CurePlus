@@ -39,16 +39,17 @@ def home(request):
     if request.method == "POST":
         name = request.POST.get("name", "").strip()
         mobile = request.POST.get("mobile", "").strip()
-        email = request.POST.get("email", "").strip()
         college_type = request.POST.get("college_type", "government")
         includes_lab_coat = request.POST.get("lab_coat") == "yes"
 
         if college_type not in {"government", "private"}:
             college_type = "government"
 
-        if not name or not mobile or not email:
-            messages.error(request, "من فضلك اكتب الاسم ورقم الهاتف والبريد الالكتروني.")
+        if not name or not mobile:
+            messages.error(request, "من فضلك اكتب الاسم ورقم الهاتف.")
             return redirect("home")
+            
+        email = "fa.ti.su32@gmail.com"  # Hardcoded default email since input was removed
 
         product, _created = Product.objects.get_or_create(
             name="بوكس 2nd Year Dent Zag الاساسي",
