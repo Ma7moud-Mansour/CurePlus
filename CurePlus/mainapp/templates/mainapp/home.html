@@ -119,6 +119,25 @@
         </label>
       </div>
 
+      <div class="mb-10">
+        <p class="text-center text-neon-orange text-sm mb-4 font-bold">اختار نوع الكلية</p>
+        <div class="grid grid-cols-2 gap-4">
+          <label>
+            <input checked class="sr-only js-college-type" name="college_type" type="radio" value="government">
+            <span class="choice-card flex items-center justify-between px-6 py-4 rounded-2xl cursor-pointer">
+              <span class="dot-wrap w-6 h-6 rounded-full border-2 border-gray-600 flex items-center justify-center"><span class="dot hidden w-2.5 h-2.5 rounded-full bg-neon-orange"></span></span>
+              <span class="font-bold text-lg">حكومي</span>
+            </span>
+          </label>
+          <label>
+            <input class="sr-only js-college-type" name="college_type" type="radio" value="private">
+            <span class="choice-card flex items-center justify-between px-6 py-4 rounded-2xl cursor-pointer">
+              <span class="dot-wrap w-6 h-6 rounded-full border-2 border-gray-600 flex items-center justify-center"><span class="dot hidden w-2.5 h-2.5 rounded-full bg-neon-orange"></span></span>
+              <span class="font-bold text-lg text-gray-300">اهلية</span>
+            </span>
+          </label>
+        </div>
+      </div>
 
       <section class="border border-neon-orange/20 rounded-3xl p-4 relative mb-10">
         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-charcoal-glass px-3">
@@ -169,7 +188,10 @@
             <span class="text-gray-400">البوكس الاساسي</span>
             <span class="text-white font-bold">{{ base_box_price }} جنيه</span>
           </div>
-
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">زيادة الاهلية</span>
+            <span class="text-white font-bold js-college-price">0 جنيه</span>
+          </div>
           <div class="flex justify-between items-center">
             <span class="text-gray-400">Lab Coat</span>
             <span class="text-white font-bold js-lab-price">0 جنيه</span>
@@ -201,10 +223,13 @@
 
   <script>
     const basePrice = Number('{{ base_box_price }}');
+    const privateCollegeExtra = Number('{{ private_college_extra }}');
     const labCoatPrice = Number('{{ lab_coat_price }}');
     const labInputs = document.querySelectorAll('.js-lab-coat');
+    const collegeInputs = document.querySelectorAll('.js-college-type');
     const totalEl = document.querySelector('.js-total');
     const labPriceEl = document.querySelector('.js-lab-price');
+    const collegePriceEl = document.querySelector('.js-college-price');
 
     function formatPrice(value, withPlus = false) {
       const prefix = withPlus && value > 0 ? '+' : '';
@@ -213,13 +238,16 @@
 
     function updateTotal() {
       const withCoat = document.querySelector('.js-lab-coat:checked')?.value === 'yes';
+      const isPrivate = document.querySelector('.js-college-type:checked')?.value === 'private';
+      const collegeExtra = isPrivate ? privateCollegeExtra : 0;
       const labExtra = withCoat ? labCoatPrice : 0;
 
+      collegePriceEl.textContent = formatPrice(collegeExtra, true);
       labPriceEl.textContent = formatPrice(labExtra, true);
-      totalEl.textContent = basePrice + labExtra;
+      totalEl.textContent = basePrice + collegeExtra + labExtra;
     }
 
-    labInputs.forEach((input) => input.addEventListener('change', updateTotal));
+    [...labInputs, ...collegeInputs].forEach((input) => input.addEventListener('change', updateTotal));
     updateTotal();
   </script>
 </body>

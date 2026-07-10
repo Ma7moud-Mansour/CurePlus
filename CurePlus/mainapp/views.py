@@ -21,8 +21,10 @@ def money_as_int(value):
         return value
 
 
-def calculate_total(pricing, includes_lab_coat):
+def calculate_total(pricing, college_type, includes_lab_coat):
     total = pricing.base_box_price
+    if college_type == "private":
+        total += pricing.private_college_extra
     if includes_lab_coat:
         total += pricing.lab_coat_price
     return total
@@ -38,7 +40,11 @@ def home(request):
         name = request.POST.get("name", "").strip()
         mobile = request.POST.get("mobile", "").strip()
         email = request.POST.get("email", "").strip()
+        college_type = request.POST.get("college_type", "government")
         includes_lab_coat = request.POST.get("lab_coat") == "yes"
+
+        if college_type not in {"government", "private"}:
+            college_type = "government"
 
         if not name or not mobile or not email:
             messages.error(request, "من فضلك اكتب الاسم ورقم الهاتف والبريد الالكتروني.")
@@ -56,15 +62,16 @@ def home(request):
             product.price = pricing.base_box_price
             product.save(update_fields=["price"])
 
-        total = calculate_total(pricing, includes_lab_coat)
+        total = calculate_total(pricing, college_type, includes_lab_coat)
 
         order = Order.objects.create(
             customer_name=name,
             customer_mobile=mobile,
             customer_email=email,
+            college_type=college_type,
             includes_lab_coat=includes_lab_coat,
             product=product,
-            total_amount=total,
+            total_amount=calculate_total(pricing, college_type, includes_lab_coat),
             bill_reference=get_random_string(10).upper(),
         )
 
@@ -102,6 +109,7 @@ def home(request):
 
     context = {
         "base_box_price": money_as_int(pricing.base_box_price),
+        "private_college_extra": money_as_int(pricing.private_college_extra),
         "lab_coat_price": money_as_int(pricing.lab_coat_price),
         "equipment": [
             ("Torch", "https://lh3.googleusercontent.com/aida-public/AB6AXuC8k6iy9aEBe1Y-Vsg8RsN2rYkHqWHT80L70bdDypdyr9eg3BS1V1kz5a9Pl4qT3cCMrKxH2w2f6sYI0kdSB_PkPCMNtQAP6p9YPoG9USfcFsGLPsCc3ynhQkro92ahhTE6fjWFO1K5V4EZ-0NqXa-wyD0uZDqVier_Q5EKmAyZk_eoYqkMnQGleo1AyTCDHF0aq_qIXZqk4RofI4Siqz1MKOqihYaL_qiCeDiSvj7AhOuyOVaRqMshb2EnpLOt6GVn-bYLmNGkSQ"),
