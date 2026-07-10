@@ -15,7 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 def money_as_int(value):
-    return int(value) if value == value.to_integral_value() else float(value)
+    try:
+        return int(value) if int(value) == float(value) else float(value)
+    except (ValueError, TypeError):
+        return value
 
 
 def calculate_total(pricing, includes_lab_coat):
